@@ -1,0 +1,15 @@
+.bundle
+log/*.log
+tmp/
+.idea/
+.bundle
+*.tmproj
+coverage/
+*.DS_Store
+.rvmrc
+*.swp
+Gemfile.*
+.rvm*
+*~
+*.*~
+.rspec
