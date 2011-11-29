@@ -1,6 +1,9 @@
 module ReadItLater
+  autoload :Api, 'read_it_later/api'
   autoload :Version, 'read_it_later/version'
   autoload :Header,  'read_it_later/header'
+  autoload :Response, 'read_it_later/response'
+  autoload :Text, 'read_it_later/text'
 end
 
 =begin

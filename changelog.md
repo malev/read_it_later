@@ -2,5 +2,6 @@
 
 ##  0.0.x - November x, 2011
 
-* Make it work!
-
+* Authenticate
+* Status
+* Get text
