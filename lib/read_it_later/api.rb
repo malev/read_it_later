@@ -1,17 +1,38 @@
 require 'httparty'
 
+# The ReadItLater module is a wrapper over ReadItLate API
+# to work with it as Ruby objects.
+# The main idea is to provide a tool as close to the original
+# behavior of the API.
+
+# Author::    Marcos Vanetta  (mailto:marcosvanetta@gmail.com)
+# Copyright:: Copyright (c) 2011 Marcos Vanetta 
+# License::   LGPL
 module ReadItLater
   class Api
 
+    # Holds the api_key assigned to this ReadItLater instance.
     attr_reader :apikey
 
     include HTTParty
     base_uri 'https://readitlaterlist.com'
 
+    # Creates a new instance of ReadItLater Wrapper
+    #
+    #     @ril = ReadItLater.new("yourapikey")
+    #
     def initialize(apikey)
       @apikey = apikey
     end
 
+    # Check if the user credentials are valid.
+    #
+    #     @user = ReadItLater.new("username", "password")
+    #
+    #     @ril = ReadItLater.new("yourapikey")
+    #
+    #     @ril.authenticate(@user) # -> true / false
+    #
     def authenticate(user)
       response = self.class.get("/v2/auth", :query => generate_query(user))
       if response.code == 200

@@ -1,3 +1,12 @@
+# The ReadItLater module is a wrapper over ReadItLate API
+# to work with it as Ruby objects.
+# The main idea is to provide a tool as close to the original
+# behavior of the API.
+
+# Author::    Marcos Vanetta  (mailto:marcosvanetta@gmail.com)
+# Copyright:: Copyright (c) 2011 Marcos Vanetta 
+# License::   LGPL
+
 module ReadItLater
   autoload :Api, 'read_it_later/api'
   autoload :Version, 'read_it_later/version'
