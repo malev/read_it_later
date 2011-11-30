@@ -2,8 +2,46 @@ require 'httparty'
 
 module ReadItLater
   class Api
+
+    attr_reader :apikey
+
     include HTTParty
     base_uri 'https://readitlaterlist.com'
+
+    def initialize(apikey)
+      @apikey = apikey
+    end
+
+    def authenticate(user)
+      response = self.class.get("/v2/auth", :query => generate_query(user))
+      if response.code == 200
+        true
+      elsif response.code == 401
+        false
+      else
+        raise ArgumentError
+      end
+    end
+
+    def status(user)
+      response = self.class.get("/v2/stats", :query => generate_query(user))
+      response.headers
+    end
+
+    def text(url)
+      Text.bring(:url => url, :apikey => @apikey).body
+    end
+
+    def generate_query(user = nil, options = {})
+      pre_params = if user
+        {:username => user.username,
+         :password => user.password,
+         :apikey => @apikey}
+      else
+        { :apikey => @apikey }
+      end
+      pre_params.merge(options)
+    end
 
     def self.authenticate(credentials)
       credentials[:apikey] = get_apikey
@@ -16,25 +54,6 @@ module ReadItLater
       else
         raise ArgumentError
       end
-    end
-
-    def self.status(credentials)
-      credentials[:apikey] = get_apikey
-      query = credentials
-      response = bring("/v2/stats", query)
-      response.headers
-    end
-
-    def self.bring(path, query)
-      get(path, :query => query)
-    end
-
-    def self.text(url)
-      Text.bring(:url => url).body
-    end
-
-    def self.get_apikey
-      "c66gkx0Zpfu44ad8diT9d77P3fAjlp50"
     end
 
     #def self.bring(path, query)
