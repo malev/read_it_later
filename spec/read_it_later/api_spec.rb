@@ -65,9 +65,41 @@ describe ReadItLater::Api do
   end
 
   describe "should get the user's list" do
-    it "should retrieve all the user's list"
-    it "should retrieve all the user's unread list"
+    before :all do
+      FakeWeb.allow_net_connect = false
+    end
+
+    before do
+      @user = ReadItLater::User.new("username", "password")
+      @ril = ReadItLater::Api.new("apikey")
+    end
+
+    it "should retrieve all the user's unread list" do
+      url = "https://readitlaterlist.com/v2/get?username=username&password=password&apikey=apikey&state=unread"
+      response = {
+        "status"=>1, 
+        "list"=>{
+          "120157042"=>{
+            "item_id"=>"120157042", 
+            "title"=>"P\u00E1gina/12 :: El pa\u00EDs :: Ultima sesi\u00F3n con alto impacto social", 
+            "url"=>"http://www.pagina12.com.are/diario/elpais/1-182477-2011-12-01.html", 
+            "time_updated"=>"1322746244", 
+            "time_added"=>"1322746216", 
+            "state"=>"0"}
+          }, 
+        "since"=>1322749368, 
+        "complete"=>1
+      }
+      
+      FakeWeb.register_uri(:get, url, response)
+
+      response = @ril.get(@user, :state => :unread)
+      response.should be_instance_of(Hash)
+      response["list"].should_not be_nil
+    end
+
     it "should retrieve 2 unread articles"
+    it "should retrieve all the user's list"
   end
 
   describe "should convert text without a user" do

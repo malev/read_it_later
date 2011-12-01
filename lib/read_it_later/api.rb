@@ -19,6 +19,8 @@ module ReadItLater
 
     # Creates a new instance of ReadItLater Wrapper
     #
+    # @param [String] The Apikey provide by ReadItLater.com 
+    #
     #     @ril = ReadItLater.new("yourapikey")
     #
     def initialize(apikey)
@@ -26,6 +28,9 @@ module ReadItLater
     end
 
     # Check if the user credentials are valid.
+    # 
+    # @param [user] User instance from ReadItLater::User class
+    # @return [Boolean] true or false
     #
     #     @user = ReadItLater.new("username", "password")
     #
@@ -64,57 +69,9 @@ module ReadItLater
       pre_params.merge(options)
     end
 
-    def self.authenticate(credentials)
-      credentials[:apikey] = get_apikey
-      query = credentials
-      response = bring("/v2/auth", query)
-      if response.code == 200
-        true
-      elsif response.code == 401
-        false
-      else
-        raise ArgumentError
-      end
+    def get(user, options = {})
+      response = self.class.get("/v2/get", :query => generate_query(user, options))
+      response.to_hash
     end
-
-    #def self.bring(path, query)
-      #response = if path =~ /text/
-        #Text.bring(path, :query => query)
-      #else
-        #get(path, :query => query)
-      #end
-      #wrapper(response)
-    #end
-
-    #def self.wrapper(response)
-      #Response.new(response)
-    #end
-
-    #def self.create(opt = {})
-      #user = self.new opt[:username], opt[:password], get_apikey
-      #raise ArgumentError unless user.valid?
-      #query = { :username => @username, :passowrd => @passowrd, :apikey => @apikey}
-      #resp = self.class.bring("/v2/signup", query)
-      ## validate that the response is not 401
-    #end
-
-    #def self.authenticate(query = {})
-      #query[:apikey]  get_apikey
-      #bring("/v2/auth", query)
-    #end
-
-    #def initialize(username, password, apikey=nil)
-      #@apikey = apikey.nil? ? get_apikey : apikey
-      #@username = username
-      #@passowrd = passowrd
-    #end
-
-    #def valid?
-      #@username.length <= 20 && @passowrd <= 20
-    #end
-
-    #def wrapper(response)
-      #Response.new(response)
-    #end
   end
 end
