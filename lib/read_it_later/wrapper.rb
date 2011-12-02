@@ -9,7 +9,7 @@ require 'httparty'
 # Copyright:: Copyright (c) 2011 Marcos Vanetta 
 # License::   LGPL
 module ReadItLater
-  class Api
+  class Wrapper
 
     # Holds the api_key assigned to this ReadItLater instance.
     attr_reader :apikey
@@ -39,7 +39,14 @@ module ReadItLater
     #     @ril.authenticate(@user) # -> true / false
     #
     def authenticate(user)
-      self.class.get("/v2/auth", :query => generate_query(user))
+      response = self.class.get("/v2/auth", :query => generate_query(user))
+      if response.code == 200
+        true
+      elsif response.code == 401
+        false
+      else
+        raise ArgumentError
+      end
     end
 
     def status(user)

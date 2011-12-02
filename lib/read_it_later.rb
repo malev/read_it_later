@@ -14,6 +14,7 @@ module ReadItLater
   autoload :Response, 'read_it_later/response'
   autoload :Text, 'read_it_later/text'
   autoload :User, 'read_it_later/user'
+  autoload :Wrapper, 'read_it_later/wrapper'
 end
 
 =begin
