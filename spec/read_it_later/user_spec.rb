@@ -7,6 +7,9 @@ describe ReadItLater::User do
     user.password.should eql("password")
   end
 
-  it "should validate that the username and password are valid"
+  it "should validate that the username and password are valid" do
+  	user= ReadItLater::User.new("username", "password")
+  	user.valid?.should be_true
+  end
   
 end

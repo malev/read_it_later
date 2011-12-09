@@ -98,8 +98,36 @@ describe ReadItLater::Wrapper do
       response["list"].should_not be_nil
     end
 
-    it "should retrieve 2 unread articles"
-    it "should retrieve all the user's list"
+    it "should retrieve 4 unread articles" do
+      url = "https://readitlaterlist.com/v2/get?username=username&password=password&apikey=apikey&state=unread&count=2"
+      response = { 
+        "status"=>1, 
+        "list"=>{
+          "121544880"=>{
+            "item_id"=>"121544880", 
+            "title"=>"An Introduction To Rspec | Think Vitamin", 
+            "url"=>"http://thinkvitamin.com/code/ruby-on-rails/an-introduction-to-rspec/", 
+            "time_updated"=>"1323290918", 
+            "time_added"=>"1323290918", 
+            "state"=>"0"}, 
+          "121409062"=>{
+            "item_id"=>"121409062", 
+            "title"=>"El Software-martillo", 
+            "url"=>"http://endefensadelsl.org/el_software-martillo.html", 
+            "time_updated"=>"1323231083", 
+            "time_added"=>"1323231083", 
+            "state"=>"0"}
+          }, 
+        "since"=>1323452654, 
+        "complete"=>1
+      } 
+
+      FakeWeb.register_uri(:get, url, response)
+
+      response = @ril.get(@user, :state => :unread, :count => 2)
+      response.should be_instance_of(Hash)
+      response["list"].should_not be_nil
+    end
   end
 
   describe "should convert text without a user" do
